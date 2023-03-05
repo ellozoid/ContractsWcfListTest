@@ -6,11 +6,19 @@
         xmlns:local="clr-namespace:ContractManagerClient"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
-    <DataGrid x:Name="ContractsGrid" AutoGenerateColumns="False">
-        <DataGrid.Columns>
-            <DataGridTextColumn Header="Date" Binding="{Binding Date}" />
-            <DataGridTextColumn Header="Number" Binding="{Binding Number}" />
-            <DataGridCheckBoxColumn Header="Relevance" Binding="{Binding IsRelevant}" />
-        </DataGrid.Columns>
-    </DataGrid>
+	<StackPanel>
+		<StackPanel Orientation="Horizontal">
+			<Button Content="Refresh" Click="Refresh_Click" Width="53" />
+			<Button Content="Save" Click="Save_Click" Width="57" Height="28" />
+			<Button Content="Save" Click="Add_Click" Width="57" Height="28" />
+		</StackPanel>
+		<DataGrid x:Name="ContractsGrid" AutoGenerateColumns="False">
+			<DataGrid.Columns>
+				<DataGridTextColumn Header="Number" Binding="{Binding Number}" />
+				<DataGridTextColumn Header="Date" Binding="{Binding CreationDate, StringFormat=d}" />
+				<DataGridTextColumn Header="Last Update Date" Binding="{Binding LastUpdateDate, StringFormat=d}" />
+				<DataGridCheckBoxColumn Header="Is Relevant" Binding="{Binding IsRelevant, Mode=OneWay}" />
+			</DataGrid.Columns>
+		</DataGrid>
+	</StackPanel>
 </Window>
