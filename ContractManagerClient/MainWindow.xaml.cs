@@ -1,6 +1,7 @@
 ﻿using ContractManagerClient.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Linq;
 using System.ServiceModel;
@@ -19,15 +20,20 @@ namespace ContractManagerClient
             InitializeComponent();
 
             contractsService = GetClientInstance();
+            Refresh();
+        }
 
+        private void Refresh()
+        {
             var contracts = contractsService.GetContracts();
 
-            ContractsGrid.ItemsSource = contracts.Select(x => new ContractModel 
-            { 
+            ContractsGrid.ItemsSource = contracts.Select(x => new ContractModel
+            {
+                Id = x.Id,
                 Number = x.Number,
                 CreationDate = x.CreateDate,
                 LastUpdateDate = x.ModifyDate
-            });
+            }).ToList();
         }
 
         private ContractServiceClient GetClientInstance()
@@ -41,14 +47,7 @@ namespace ContractManagerClient
 
         private void Refresh_Click(object sender, RoutedEventArgs e)
         {
-            var contracts = contractsService.GetContracts();
-
-            ContractsGrid.ItemsSource = contracts.Select(x => new ContractModel
-            {
-                Number = x.Number,
-                CreationDate = x.CreateDate,
-                LastUpdateDate = x.ModifyDate
-            });
+            Refresh();
         }
 
         private void Save_Click(object sender, RoutedEventArgs e)
@@ -67,15 +66,21 @@ namespace ContractManagerClient
 
         private void Add_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var contract in ContractsGrid.Items.OfType<ContractModel>())
+            var addContractWindow = new ContractAddWindow();
+            if (addContractWindow.ShowDialog() == true)
             {
-                contractsService.UpdateContract(new ContractsService.Models.Contract
-                {
-                    Id = contract.Id,
-                    ModifyDate = contract.LastUpdateDate,
+                var contract = addContractWindow.GetContract();
+                var contracts = (List<ContractModel>)ContractsGrid.ItemsSource;
+                contracts.Add(contract);
+
+                contractsService.AddContract(new ContractsService.Models.Contract 
+                { 
+                    Number = contract.Number,
                     CreateDate = contract.CreationDate,
-                    Number = contract.Number
+                    ModifyDate = contract.LastUpdateDate
                 });
+
+                Refresh();
             }
         }
     }

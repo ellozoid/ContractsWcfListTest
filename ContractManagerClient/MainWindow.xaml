@@ -10,7 +10,7 @@
 		<StackPanel Orientation="Horizontal">
 			<Button Content="Refresh" Click="Refresh_Click" Width="53" />
 			<Button Content="Save" Click="Save_Click" Width="57" Height="28" />
-			<Button Content="Save" Click="Add_Click" Width="57" Height="28" />
+			<Button Content="Add" Click="Add_Click" Width="57" Height="28" />
 		</StackPanel>
 		<DataGrid x:Name="ContractsGrid" AutoGenerateColumns="False">
 			<DataGrid.Columns>
